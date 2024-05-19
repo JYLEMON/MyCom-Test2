@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">MyCom</string>
+    <string name="EmployeeList">Employee List</string>
+    <string name="EmployeeAdd">Add Employee</string>
+    <string name="EmployeeDetail">Employee Detail</string>
+    <string name="EmployeeEdit">Employee Edit</string>
+    <string name="rules">Rules Modification</string>
+    <string name="displayWorkList">Work List Display</string>
+    <string name="workAssign">Work Assign</string>
+    <string name="editWorkingTime">Edit working time</string>
+    <string name="showRules">Show Rules</string>
+    <string name="whatTimeStart">"Start Time: "</string>
+    <string name="whatStartMinute">"Change Start minute to "</string>
+    <string name="workDetail">Display detail work</string>
+    <string name="modifyWork">Modify Work Detail</string>
+    <string name="EmployeeStatus">Status display</string>
+    <string name="AcceptableWorkList">Acceptable Work List</string>
+    <string name="login">login</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="register">Register</string>
+    <string name="staff">Staff</string>
+    <string name="AddApproval">AddApproval</string>
+    <string name="manageScreen">Management Screen</string>
+</resources>
