@@ -29,6 +29,7 @@ import com.example.myapplication.DatabaseApproval.ApprovalEvent
 import com.example.myapplication.DatabaseApproval.ApprovalState
 import com.example.myapplication.ui.theme.Approvalscreen.StaffApprovalScreen
 import com.example.mycom.R
+import com.example.mycom.ui.Approvalscreen.ManagerApprovalScreen
 import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
 import com.example.mycom.ui.ManagementModule.RuleModify.TimePickerEvent
 import com.example.mycom.ui.ManagementModule.RuleModify.TimeRangeState
@@ -185,8 +186,9 @@ fun ManagementApp(
                     }
                 }
             }
+
             composable(route = ManagementScreen.aprManage.name) {
-                StaffApprovalScreen(state = aprState, onEvent = onAprEvent)
+                ManagerApprovalScreen(state = aprState, onEvent = onAprEvent)
             }
             composable(route = ManagementScreen.empManagement.name) {
                 EmployeeScreenTest(state = empState, onEmpEvent)

@@ -37,7 +37,7 @@ fun StaffApprovalScreen(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        val staffid = "c"
+        val staffid = " 123456"
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -59,6 +59,7 @@ fun StaffApprovalScreen(
                             )
                             Text(text = "${Approval.leaveandlate}", fontSize = 12.sp)
                         }
+                        Text(text = "${Approval.stateinfo}", fontSize = 12.sp)
                         IconButton(onClick = {
                             onEvent(ApprovalEvent.DeleteApproval(Approval))
                         }) {

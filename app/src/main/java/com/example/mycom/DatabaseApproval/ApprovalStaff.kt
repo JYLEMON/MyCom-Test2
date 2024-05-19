@@ -11,6 +11,7 @@ data class Approval(
     val apptime:String? ="",
     val appdate:String? ="",
     val staffid: String ="None",
+    val name: String ="None",
     @PrimaryKey(autoGenerate = true)
     val apporvalnum: Int = 0
 
