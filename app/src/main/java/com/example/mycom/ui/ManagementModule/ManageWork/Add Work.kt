@@ -81,7 +81,7 @@ fun AddWorkScreen(
             },
             modifier = Modifier.padding(vertical = 16.dp)
         ) {
-            Text("Add Work")
+            Text("Add Work ")
         }
     }
 }

@@ -25,16 +25,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.managementsystem.ManagementModule.MainScreen
 import com.example.managementsystem.ManagementModule.WorkEvent
 import com.example.myapplication.DatabaseApproval.ApprovalEvent
 import com.example.myapplication.DatabaseApproval.ApprovalState
-import com.example.myapplication.MainScreen
-import com.example.myapplication.ui.theme.Approvalscreen.AddApproval
 import com.example.mycom.R
 import com.example.mycom.ui.Approvalscreen.AddStaffApporval
 import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
-import com.example.mycom.ui.employee.EmployeeState
 import com.example.mycom.ui.status.DisplayAssignableWorkListScreen
 import com.example.mycom.ui.status.EmployeeWorkEvent
 import com.example.mycom.ui.status.EmployeeWorkState
