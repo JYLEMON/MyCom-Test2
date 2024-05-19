@@ -1,5 +1,6 @@
 package com.example.managementsystem.ManagementModule
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +17,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mycom.R
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun MainScreen(
+    navController: NavHostController = rememberNavController(),
+    onClickSetTime: () -> Unit,
+    onClickEmp: () -> Unit,
+    onClickApr: () -> Unit,
+    onClickWork: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column (Modifier.fillMaxSize()) {
             Text(
@@ -31,10 +39,10 @@ fun MainScreen(navController: NavHostController) {
                 modifier = Modifier.padding(16.dp)
             ) {
 
-                NavigationCard("Set Work Time", onClick = { /* Navigate to Set Work Time Screen */ })
-                NavigationCard("Employee Management", onClick = { /* Navigate to Employee Management Screen */ })
-                NavigationCard("Approval Management", onClick = { /* Navigate to Approval Management Screen */ })
-                NavigationCard("Work Management", onClick = { /* Navigate to Work Management Screen */ })
+                NavigationCard("Set Work Time", onClick = onClickSetTime)
+                NavigationCard("Employee Management", onClick = onClickEmp)
+                NavigationCard("Approval Management", onClick = onClickApr)
+                NavigationCard("Work Management", onClick = onClickWork)
             }
         }
 
@@ -65,5 +73,5 @@ fun NavigationCard(title: String, onClick: () -> Unit) {
 @Composable
 fun ManagementMainPreview() {
     val navController = rememberNavController()
-    MainScreen(navController)
+    //MainScreen(navController)
 }

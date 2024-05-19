@@ -25,10 +25,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.managementsystem.Data.Work
+import com.example.myapplication.DatabaseApproval.ApprovalEvent
+import com.example.myapplication.DatabaseApproval.ApprovalState
+import com.example.myapplication.ui.theme.Approvalscreen.StaffApprovalScreen
 import com.example.mycom.R
+import com.example.mycom.ui.Approvalscreen.ManagerApprovalScreen
 import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
 import com.example.mycom.ui.ManagementModule.RuleModify.TimePickerEvent
 import com.example.mycom.ui.ManagementModule.RuleModify.TimeRangeState
+import com.example.mycom.ui.employee.EmployeeEvent
+import com.example.mycom.ui.employee.EmployeeScreenTest
+import com.example.mycom.ui.employee.EmployeeState
 import com.example.mycom.ui.theme.MyComTheme
 
 enum class ManagementScreen(@StringRes val title: Int) {
@@ -37,7 +44,9 @@ enum class ManagementScreen(@StringRes val title: Int) {
     displayWork(title = R.string.displayWorkList),
     workAssign(title = R.string.workAssign),
     detailedWork(title = R.string.workDetail),
-    modifyWork(title = R.string.modifyWork)
+    modifyWork(title = R.string.modifyWork),
+    empManagement(title = R.string.EmpManage),
+    aprManage(title = R.string.AprManage)
 }
 
 @Composable
@@ -75,6 +84,10 @@ fun ManagementApp(
     state: WorkState,
     onEvent: (WorkEvent) -> Unit,
     timeRangeState: TimeRangeState,
+    empState: EmployeeState,
+    onEmpEvent:(EmployeeEvent) -> Unit,
+    aprState: ApprovalState,
+    onAprEvent: (ApprovalEvent) -> Unit,
     onTimeEvent: (TimePickerEvent) -> Unit
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -94,12 +107,6 @@ fun ManagementApp(
 
     Scaffold(
         bottomBar = {
-            NavigationBar(
-                currentScreen = currentScreen,
-                navigateUp = { navController.navigateUp() },
-                goSetRulesButtonClicked = {navController.navigate(ManagementScreen.ruleSet.name)},
-                goShowWorkButtonClicked = {navController.navigate(ManagementScreen.displayWork.name)}
-            )
         }
     ) { innerPadding ->
         NavHost(
@@ -108,7 +115,12 @@ fun ManagementApp(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = ManagementScreen.managementMain.name) {
-                MainScreen(navController)
+                MainScreen(
+                    onClickSetTime = {navController.navigate(ManagementScreen.ruleSet.name)},
+                    onClickEmp = {navController.navigate(ManagementScreen.empManagement.name)},
+                    onClickApr = {navController.navigate(ManagementScreen.aprManage.name)},
+                    onClickWork = {navController.navigate(ManagementScreen.displayWork.name)}
+                )
             }
             composable(route = ManagementScreen.ruleSet.name) {
                 ShowRulesScreen(state = timeRangeState, onEvent = onTimeEvent)
@@ -174,6 +186,12 @@ fun ManagementApp(
                     }
                 }
             }
+            composable(route = ManagementScreen.aprManage.name) {
+                ManagerApprovalScreen(state = aprState, onEvent = onAprEvent)
+            }
+            composable(route = ManagementScreen.empManagement.name) {
+                EmployeeScreenTest(state = empState, onEmpEvent)
+            }
         }
     }
 }
@@ -182,11 +200,5 @@ fun ManagementApp(
 @Composable
 fun managementSystemPreview(){
     MyComTheme {
-        ManagementApp(
-            state = WorkState(),
-            onEvent = {},
-            timeRangeState = TimeRangeState(),
-            onTimeEvent = {}
-        )
     }
 }

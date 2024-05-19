@@ -16,20 +16,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.managementsystem.ManagementModule.ManagementApp
+import com.example.managementsystem.ManagementModule.WorkEvent
 import com.example.myapplication.DatabaseApproval.ApprovalEvent
 import com.example.myapplication.DatabaseApproval.ApprovalState
 import com.example.myapplication.ui.theme.Approvalscreen.StaffApprovalScreen
 import com.example.myapplication.ui.theme.otherScreen.Homepage
 import com.example.myapplication.ui.theme.otherScreen.LoginScreen
+import com.example.myapplication.ui.theme.otherScreen.NormalEmployeeScreen
 import com.example.myapplication.ui.theme.otherScreen.ProfileScreen
 import com.example.myapplication.ui.theme.otherScreen.RegisterScreen
 import com.example.mycom.R
 import com.example.mycom.data.ManagerList
 import com.example.mycom.ui.Approvalscreen.AddStaffApporval
 import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
+import com.example.mycom.ui.ManagementModule.RuleModify.TimePickerEvent
 import com.example.mycom.ui.ManagementModule.RuleModify.TimeRangeState
 import com.example.mycom.ui.employee.EmployeeEvent
 import com.example.mycom.ui.employee.EmployeeState
+import com.example.mycom.ui.status.EmployeeWorkEvent
+import com.example.mycom.ui.status.EmployeeWorkState
 
 enum class MainScreen(@StringRes val title: Int) {
     Login(title = R.string.login),
@@ -46,8 +51,14 @@ fun app(
     navController: NavHostController = rememberNavController(),
     state: EmployeeState,
     onEvent: (EmployeeEvent) -> Unit,
+    workState: WorkState,
+    onWorkEvent: (WorkEvent) -> Unit,
     appstate: ApprovalState,
     apponEvent: (ApprovalEvent) -> Unit,
+    employeeWorkState: EmployeeWorkState,
+    onEmployeeWorkEvent: (EmployeeWorkEvent) -> Unit,
+    timeRangeState: TimeRangeState,
+    onTimePickerEvent: (TimePickerEvent) -> Unit
     ){
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -82,28 +93,14 @@ fun app(
                     })
     }
         composable(route = MainScreen.Home.name){
-          Homepage(
-              onClickButton1 = {
-
-              },
-              onClickButton2 = {
-                  navController.navigate(MainScreen.StaffProfile.name)
-              }
+          NormalEmployeeScreen(
+              workState = workState,
+              onWorkEvent = onWorkEvent,
+              aprState = appstate,
+              onAprEvent = apponEvent,
+              employeeWorkListState = employeeWorkState,
+              employeeWorkEvent = onEmployeeWorkEvent
           )
-        }
-        composable(route = MainScreen.StaffProfile.name) {
-            ProfileScreen(
-                empId = "E001",
-                name = "liangyouxian",
-                email = "liangyouxian1@gmail.com",
-                salary = "2000.50",
-
-                onClickButton2 = {
-                    navController.navigate(MainScreen.StaffApproval.name)
-                },
-                onClickButton3 = {
-                    navController.navigate(MainScreen.Login.name)
-                })
         }
            composable(route = MainScreen.Register.name) {
                 RegisterScreen(
@@ -115,28 +112,17 @@ fun app(
             )
         }
 
-        composable(route = MainScreen.StaffApproval.name) {
-            StaffApprovalScreen(
-                state = appstate,
-                onEvent = apponEvent ,
-                onClickButton1 = {
-                    navController.navigate(MainScreen.AddStaffApproval.name)
-                }
-            )
-        }
-
-        composable(route = MainScreen.AddStaffApproval.name) {
-            AddStaffApporval(
-                state = appstate,
-                onEvent = apponEvent ,
-                onClickButton1 = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
         composable(route = MainScreen.ManagementHome.name) {
-            ManagementApp(state = WorkState(), onEvent = {}, timeRangeState = TimeRangeState()) {}
+            ManagementApp(
+                state = workState,
+                onEvent = onWorkEvent,
+                timeRangeState = timeRangeState,
+                onTimeEvent = onTimePickerEvent,
+                empState = state,
+                onEmpEvent = onEvent,
+                aprState = appstate,
+                onAprEvent = apponEvent
+                )
         }
 
     }
