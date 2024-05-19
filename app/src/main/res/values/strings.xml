@@ -27,4 +27,5 @@
     <string name="Status">Status</string>
     <string name="EmpManage">Employee Management</string>
     <string name="AprManage">Approval Management</string>
+    <string name="addapproval">addapproval</string>
 </resources>

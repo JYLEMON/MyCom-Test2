@@ -25,16 +25,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.managementsystem.ManagementModule.MainScreen
 import com.example.managementsystem.ManagementModule.WorkEvent
 import com.example.myapplication.DatabaseApproval.ApprovalEvent
 import com.example.myapplication.DatabaseApproval.ApprovalState
-import com.example.myapplication.MainScreen
-import com.example.myapplication.ui.theme.Approvalscreen.AddApproval
+import com.example.myapplication.ui.theme.Approvalscreen.StaffApprovalScreen
 import com.example.mycom.R
 import com.example.mycom.ui.Approvalscreen.AddStaffApporval
 import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
-import com.example.mycom.ui.employee.EmployeeState
 import com.example.mycom.ui.status.DisplayAssignableWorkListScreen
 import com.example.mycom.ui.status.EmployeeWorkEvent
 import com.example.mycom.ui.status.EmployeeWorkState
@@ -51,7 +48,8 @@ enum class EmployeeScreen(@StringRes val title: Int) {
     Application(title = R.string.Application),
     Status(title = R.string.Status),
     Profile(title = R.string.profile),
-    Management(title = R.string.manageScreen)
+    Management(title = R.string.manageScreen),
+    AddApplication(title = R.string.addapproval)
 }
 
 @Composable
@@ -216,7 +214,7 @@ fun NormalEmployeeScreen(
             DisplayAssignableWorkListScreen(state = workState, onWorkSelected = {})
         }
         composable(route = EmployeeScreen.Application.name){
-            AddStaffApporval(state = aprState, onEvent = onAprEvent)
+            StaffApprovalScreen(state = aprState, onEvent = onAprEvent, onClickButton1 = {navController.navigate(EmployeeScreen.AddApplication.name)})
         }
         composable(route = EmployeeScreen.Status.name) {
             StatusNavigationHost(
@@ -226,7 +224,10 @@ fun NormalEmployeeScreen(
             )
         }
         composable(route = EmployeeScreen.Profile.name) {
-            ProfileScreen(name = "", empId = "", email = "", salary = "")
+            ProfileScreen(name = "", empId = "", email = "", salary = "", onClickButton2 = {navController.navigate(EmployeeScreen.Application.name)})
+        }
+        composable(route = EmployeeScreen.AddApplication.name) {
+            AddStaffApporval(state = aprState, onEvent = onAprEvent)
         }
     }
 }
