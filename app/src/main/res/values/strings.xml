@@ -22,4 +22,9 @@
     <string name="staff">Staff</string>
     <string name="AddApproval">AddApproval</string>
     <string name="manageScreen">Management Screen</string>
+    <string name="WorkSpace">Work Space</string>
+    <string name="Application">Application</string>
+    <string name="Status">Status</string>
+    <string name="EmpManage">Employee Management</string>
+    <string name="AprManage">Approval Management</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
@@ -18,13 +19,24 @@ import com.example.myapplication.DatabaseApproval.ApprovalViewModel
 import com.example.myapplication.DatabaseAttendance.AttendanceDatabase
 import com.example.myapplication.DatabaseAttendance.AttendanceViewModel
 import com.example.myapplication.app
+import com.example.mycom.EmployeeWorkData.EmployeeWorkDatabase
 import com.example.mycom.data.EmployeeDatabase
 import com.example.mycom.timeRangeData.TimeRangeDatabase
 import com.example.mycom.ui.ManagementModule.RuleModify.TimePickerEvent
 import com.example.mycom.ui.ManagementModule.RuleModify.TimeRangeState
 import com.example.mycom.ui.employee.EmployeeViewModel
 import com.example.mycom.ui.ManagementModule.RuleModify.TimeRangeViewModel
+import com.example.mycom.ui.status.EmployeeWorkViewModel
 import com.example.mycom.ui.theme.MyComTheme
+
+enum class MainScreen(@StringRes val title: Int) {
+    Home(title = R.string.home),
+    StaffProfile(title = R.string.profile),
+    Register(title = R.string.register ),
+    StaffApproval(title = R.string.staff),
+    AddStaffApproval(title = R.string.AddApproval),
+    ManagementHome(title = R.string.manageScreen)
+}
 
 class MainActivity : ComponentActivity() {
     private val appr by lazy {
@@ -96,6 +108,24 @@ class MainActivity : ComponentActivity() {
         }
     )
 
+    private val employeeWorkDb by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            EmployeeWorkDatabase::class.java,
+            "empoyeeworkList.db"
+        ).build()
+    }
+
+    private val employeeWorkViewModel by viewModels<EmployeeWorkViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <U : ViewModel> create(modelClass: Class<U>): U {
+                    return EmployeeWorkViewModel(employeeWorkDb.dao) as U
+                }
+            }
+        }
+    )
+
     private val timedb by lazy {
         Room.databaseBuilder(
             applicationContext,
@@ -125,8 +155,12 @@ class MainActivity : ComponentActivity() {
                 //EmployeeScreenTest(state = state, onEvent = viewModel::onEvent)
                 val apprstate by approvalviewModel.state.collectAsState()
                 val Attesyaye by attendanceviewModel.state.collectAsState()
+                val empWorkState by employeeWorkViewModel.state.collectAsState()
                 //StaffApprovalScreen(state = apprstate, onEvent = approvalviewModel::onEvent)
-                app(state = state, onEvent = viewModel::onEvent, appstate = apprstate, apponEvent = approvalviewModel::onEvent)
+                app(state = state, onEvent = viewModel::onEvent, appstate = apprstate, apponEvent = approvalviewModel::onEvent,
+                    workState = workState, onWorkEvent = workViewModel::onEvent, employeeWorkState = empWorkState,
+                    onEmployeeWorkEvent = employeeWorkViewModel::onEvent, timeRangeState = timeRangeState, onTimePickerEvent = timeRangeViewModel::onEvent
+                )
                 // RegisterScreen(state = state, onEvent = viewModel::onEvent)
 
                 if (!OneTimeRunUtil.hasRun(this)) {

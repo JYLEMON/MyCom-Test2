@@ -1,7 +1,10 @@
 package com.example.myapplication.ui.theme.otherScreen
 
+import StatusNavigationHost
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -17,6 +20,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.example.managementsystem.ManagementModule.MainScreen
+import com.example.managementsystem.ManagementModule.WorkEvent
+import com.example.myapplication.DatabaseApproval.ApprovalEvent
+import com.example.myapplication.DatabaseApproval.ApprovalState
+import com.example.myapplication.MainScreen
+import com.example.myapplication.ui.theme.Approvalscreen.AddApproval
+import com.example.mycom.R
+import com.example.mycom.ui.Approvalscreen.AddStaffApporval
+import com.example.mycom.ui.ManagementModule.ManageWork.WorkState
+import com.example.mycom.ui.employee.EmployeeState
+import com.example.mycom.ui.status.DisplayAssignableWorkListScreen
+import com.example.mycom.ui.status.EmployeeWorkEvent
+import com.example.mycom.ui.status.EmployeeWorkState
 import com.example.mycom.ui.theme.MyComTheme
 import kotlinx.coroutines.delay
 import java.text.SimpleDateFormat
@@ -24,10 +45,24 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
+enum class EmployeeScreen(@StringRes val title: Int) {
+    Home(title = R.string.home),
+    WorkSpace(title = R.string.WorkSpace),
+    Application(title = R.string.Application),
+    Status(title = R.string.Status),
+    Profile(title = R.string.profile),
+    Management(title = R.string.manageScreen)
+}
+
 @Composable
 fun Homepage(
     onClickButton1: () -> Unit = {},
     onClickButton2: () -> Unit = {},
+    onNavigateToWorkSpace: () -> Unit,
+    onNavigateToApplication: () -> Unit,
+    onNavigateToStatus: () -> Unit,
+    onNavigateToProfile: () -> Unit,
+    onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var punchInTime by remember { mutableStateOf<LocalTime?>(null) }
@@ -113,41 +148,85 @@ fun Homepage(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxSize()
             ) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onNavigateToWorkSpace) {
                     Icon(
                         Icons.Outlined.Add,
                         contentDescription = "WorkSpace"
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onNavigateToApplication) {
                     Icon(
                         Icons.Outlined.Email,
                         contentDescription = "Application"
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onNavigateToStatus) {
                     Icon(
                         Icons.Outlined.Info,
                         contentDescription = "Status"
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onNavigateToProfile) {
                     Icon(
                         Icons.Outlined.Person,
                         contentDescription = "Profile"
                     )
                 }
 
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = onNavigateToHome) {
                     Icon(
-                        Icons.Outlined.Build,
+                        Icons.Outlined.Home,
                         contentDescription = "Management Screen"
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun NormalEmployeeScreen(
+    workState: WorkState,
+    onWorkEvent: (WorkEvent) -> Unit,
+    aprState: ApprovalState,
+    onAprEvent: (ApprovalEvent) -> Unit,
+    employeeWorkListState: EmployeeWorkState,
+    employeeWorkEvent: (EmployeeWorkEvent) -> Unit,
+    navController: NavHostController = rememberNavController(),
+) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentScreen = EmployeeScreen.valueOf(
+        backStackEntry?.destination?.route ?: EmployeeScreen.Home.name
+    )
+    NavHost(navController = navController, startDestination = EmployeeScreen.Home.name) {
+        composable(route = EmployeeScreen.Home.name) {
+            Homepage(
+                onNavigateToWorkSpace = {navController.navigate(EmployeeScreen.WorkSpace.name)},
+                onNavigateToApplication = {navController.navigate(EmployeeScreen.Application.name)},
+                onNavigateToStatus = {navController.navigate(EmployeeScreen.Status.name)},
+                onNavigateToProfile = {navController.navigate(EmployeeScreen.Profile.name)},
+                onNavigateToHome = {navController.navigate(EmployeeScreen.Home.name)}
+            )
+        }
+        composable(route = EmployeeScreen.WorkSpace.name) {
+            DisplayAssignableWorkListScreen(state = workState, onWorkSelected = {})
+        }
+        composable(route = EmployeeScreen.Application.name){
+            AddStaffApporval(state = aprState, onEvent = onAprEvent)
+        }
+        composable(route = EmployeeScreen.Status.name) {
+            StatusNavigationHost(
+                workListState = workState,
+                employeeWorkListState = employeeWorkListState,
+                onEvent = employeeWorkEvent
+            )
+        }
+        composable(route = EmployeeScreen.Profile.name) {
+            ProfileScreen(name = "", empId = "", email = "", salary = "")
         }
     }
 }
@@ -208,6 +287,5 @@ fun RealDate() {
 @Composable
 fun HomePreview() {
     MyComTheme {
-        Homepage()
     }
 }
