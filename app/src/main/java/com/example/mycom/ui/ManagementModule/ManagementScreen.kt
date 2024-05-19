@@ -186,6 +186,7 @@ fun ManagementApp(
                     }
                 }
             }
+
             composable(route = ManagementScreen.aprManage.name) {
                 ManagerApprovalScreen(state = aprState, onEvent = onAprEvent)
             }
